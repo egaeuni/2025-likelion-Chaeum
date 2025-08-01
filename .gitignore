@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### Application properties ###
-application.yml
+**/application.yml
 application.properties
 
 ### 기타 ###
