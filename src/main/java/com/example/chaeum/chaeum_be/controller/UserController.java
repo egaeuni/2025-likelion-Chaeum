@@ -1,5 +1,6 @@
 package com.example.chaeum.chaeum_be.controller;
 
+import com.example.chaeum.chaeum_be.dto.user.LoginRequestDTO;
 import com.example.chaeum.chaeum_be.dto.user.RegisterDTO;
 import com.example.chaeum.chaeum_be.service.UserService;
 import jakarta.validation.Valid;
@@ -19,5 +20,11 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO dto) {
         return userService.register(dto);
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequestDTO dto) {
+        return userService.login(dto);
     }
 }

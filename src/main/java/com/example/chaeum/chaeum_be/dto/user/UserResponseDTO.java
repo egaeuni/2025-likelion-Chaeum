@@ -1,8 +1,6 @@
 package com.example.chaeum.chaeum_be.dto.user;
 
 import com.example.chaeum.chaeum_be.entity.User;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

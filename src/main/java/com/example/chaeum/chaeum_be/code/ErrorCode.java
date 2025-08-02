@@ -17,6 +17,7 @@ public enum ErrorCode {
     /**
      * 401 UNAUTHORIZED - 인증 실패
      */
+    PASSWORD_NOT_CORRECT(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
 
 
     /**
@@ -27,6 +28,7 @@ public enum ErrorCode {
     /**
      * 404 NOT_FOUND - 요청한 리소스를 찾을 수 없음
      */
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일을 가진 사용자가 존재하지 않습니다."),
 
 
     /**
