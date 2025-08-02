@@ -25,6 +25,16 @@ public class UserServiceImpl implements UserService{
     // 회원가입
     @Override
     public ResponseEntity<?> register(RegisterDTO dto) {
+        String password = dto.getPassword();
+        String pattern = "^(?=.*[A-Za-z])(?=.*\\\\d)[A-Za-z\\\\d]{4,}$";
+
+        if(!password.matches(pattern)) {
+            return ResponseEntity
+                    .status(ErrorCode.INVALID_PASSWORD_FORMAT.getStatus().value())
+                    .body(new ErrorResponseDTO(ErrorCode.INVALID_PASSWORD_FORMAT, null));
+
+        }
+
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             return ResponseEntity
                     .status(ErrorCode.PASSWORD_MISMATCH.getStatus().value())
