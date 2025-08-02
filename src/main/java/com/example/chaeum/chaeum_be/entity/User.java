@@ -26,8 +26,18 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private boolean isFirstLogin = true;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private UserPreference userPreference;
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public void setUserPreference(UserPreference preference) {
+        this.userPreference = preference;
+        preference.setUser(this);
     }
 }
