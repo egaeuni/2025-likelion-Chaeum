@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public ResponseEntity<?> register(RegisterDTO dto) {
         String password = dto.getPassword();
-        String pattern = "^(?=.*[A-Za-z])(?=.*\\\\d)[A-Za-z\\\\d]{4,}$";
+        String pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,}$";
 
         if(!password.matches(pattern)) {
             return ResponseEntity
