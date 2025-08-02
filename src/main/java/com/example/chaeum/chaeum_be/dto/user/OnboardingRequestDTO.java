@@ -1,6 +1,9 @@
 package com.example.chaeum.chaeum_be.dto.user;
 
 import com.example.chaeum.chaeum_be.entity.UserPreference;
+import com.example.chaeum.chaeum_be.enums.PurposeType;
+import com.example.chaeum.chaeum_be.enums.UsagePurposeType;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +16,8 @@ public class OnboardingRequestDTO {
     private String email;
 
     @NotNull
-    private UserPreference.PurposeType purpose;
+    private PurposeType purpose;
     // BUY일 경우만 채워짐
-    private List<UserPreference.UsagePurposeType> usagePurpose;    // 기타 의견
+    private List<UsagePurposeType> usagePurpose;    // 기타 의견
     private String additionalDetail;
 }

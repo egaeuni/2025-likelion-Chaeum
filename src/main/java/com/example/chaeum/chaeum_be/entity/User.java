@@ -26,6 +26,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Builder.Default
     private boolean isFirstLogin = true;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)

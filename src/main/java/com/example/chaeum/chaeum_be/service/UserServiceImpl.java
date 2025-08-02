@@ -9,6 +9,7 @@ import com.example.chaeum.chaeum_be.dto.user.OnboardingRequestDTO;
 import com.example.chaeum.chaeum_be.dto.user.RegisterDTO;
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.entity.UserPreference;
+import com.example.chaeum.chaeum_be.enums.PurposeType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService{
         preference.setUser(user);
         preference.setPurpose(dto.getPurpose());
 
-        if (dto.getPurpose() == UserPreference.PurposeType.BUY || dto.getPurpose() == UserPreference.PurposeType.BOTH
+        if ((dto.getPurpose() == PurposeType.BUY || dto.getPurpose() == PurposeType.BOTH)
                 && (dto.getUsagePurpose() == null || dto.getUsagePurpose().isEmpty())) {
             return ResponseEntity
                     .status(ErrorCode.USAGE_PURPOSE_REQUIRED_FOR_BUYERS.getStatus().value())
