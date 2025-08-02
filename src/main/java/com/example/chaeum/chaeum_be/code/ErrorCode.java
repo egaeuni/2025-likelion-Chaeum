@@ -12,6 +12,7 @@ public enum ErrorCode {
      * 400 BAD_REQUEST - 잘못된 요청
      */
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
 
     /**
      * 401 UNAUTHORIZED - 인증 실패
@@ -36,6 +37,8 @@ public enum ErrorCode {
     /**
      * 409 CONFLICT - 요청 충돌
      */
+    DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
+    DUPLICATE_PHONENUM(HttpStatus.CONFLICT, "이미 사용 중인 전화번호입니다."),
 
 
     /**
