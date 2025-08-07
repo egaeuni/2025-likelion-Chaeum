@@ -17,6 +17,7 @@ public enum ErrorCode {
     USAGE_PURPOSE_REQUIRED_FOR_BUYERS(HttpStatus.BAD_REQUEST, "빈집 활용 목적은 필수입니다."),
     ALREADY_ONBOARDED(HttpStatus.BAD_REQUEST, "이미 온보딩을 완료한 사용자입니다."),
 
+    INVALID_INPUT(HttpStatus.BAD_REQUEST, "사진은 최대 5장까지 등록할 수 있어요."),
     /**
      * 401 UNAUTHORIZED - 인증 실패
      */
