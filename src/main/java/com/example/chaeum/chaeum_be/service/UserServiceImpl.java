@@ -135,12 +135,30 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
     }
 
+    // mypage
+    @Override
+   public ResponseEntity<?> mypage(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
+
+        MyPageDTO dto = MyPageDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .phoneNum(user.getPhoneNum())
+                .email(user.getEmail())
+                .build();
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_MYPAGE.getStatus().value())
+                .body(new ResponseDTO<>(ResponseCode.SUCCESS_GET_MYPAGE, dto));    }
+
     // 내가 등록한 집 리스트
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<?> mypage(MyPageDTO dto) {
+    public ResponseEntity<?> myhouse(Long userId) {
+
         // 로그인 한 유저 확인
-        User user = userRepository.findUserByEmail(dto.getEmail())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
 
         List<House> houses = houseRepository.findByOwnerId(user.getId());
@@ -164,6 +182,6 @@ public class UserServiceImpl implements UserService{
 
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_GET_HOUSELIST.getStatus().value())
-                .body(new ResponseDTO<>(ResponseCode.SUCCESS_GET_HOUSELIST, dto));
+                .body(new ResponseDTO<>(ResponseCode.SUCCESS_GET_HOUSELIST, myHouseList));
     }
 }

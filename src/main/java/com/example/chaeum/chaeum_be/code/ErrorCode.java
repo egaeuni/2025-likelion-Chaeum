@@ -22,7 +22,7 @@ public enum ErrorCode {
      * 401 UNAUTHORIZED - 인증 실패
      */
     PASSWORD_NOT_CORRECT(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
-
+    UNAUTHORIZED_UESR(HttpStatus.UNAUTHORIZED, "로그인 유저만 사용 가능합니다."),
 
     /**
      * 403 FORBIDDEN - 권한 없음

@@ -10,6 +10,8 @@ public interface UserService {
     ResponseEntity<?> register(RegisterDTO dto);
     ResponseEntity<?> login(LoginRequestDTO dto);
     ResponseEntity<?> onboarding(OnboardingRequestDTO dto);
-    ResponseEntity<?> mypage(MyPageDTO dto);
+
+    ResponseEntity<?> mypage(Long userId);
+    ResponseEntity<?> myhouse(Long userId);
 }
 

@@ -1,9 +1,7 @@
 package com.example.chaeum.chaeum_be.dto.user;
 
-import com.example.chaeum.chaeum_be.entity.UserPreference;
 import com.example.chaeum.chaeum_be.enums.PurposeType;
 import com.example.chaeum.chaeum_be.enums.UsagePurposeType;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

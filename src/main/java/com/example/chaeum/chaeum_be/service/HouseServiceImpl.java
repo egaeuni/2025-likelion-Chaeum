@@ -9,6 +9,7 @@ import com.example.chaeum.chaeum_be.dto.response.ErrorResponseDTO;
 import com.example.chaeum.chaeum_be.dto.response.ResponseDTO;
 import com.example.chaeum.chaeum_be.entity.House;
 import com.example.chaeum.chaeum_be.entity.HouseImage;
+import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class HouseServiceImpl implements HouseService {
     private final HouseRepository houseRepository;
 
     @Override
-    public ResponseEntity<?> createNewHouse(NewCreateHouseDTO dto) {
+    public ResponseEntity<?> createNewHouse(NewCreateHouseDTO dto, User loginUser) {
         List<MultipartFile> imageFiles = dto.getHouseImages();
 
         if (imageFiles != null && imageFiles.size() > 5) {
@@ -51,6 +52,7 @@ public class HouseServiceImpl implements HouseService {
                 .facilities(dto.getFacilities())
                 .options(dto.getOptions())
                 .etc(dto.getEtc())
+                .owner(loginUser)
                 .build();
 
         // 이미지 처리 및 house에 연결

@@ -15,6 +15,7 @@ public enum ResponseCode {
     SUCCESS_ONBOARDING(HttpStatus.OK, "온보딩을 완료하였습니다."),
 
     SUCCESS_GET_HOUSELIST(HttpStatus.OK, "내가 등록한 집 리스트를 성공적으로 불러왔습니다."),
+    SUCCESS_GET_MYPAGE(HttpStatus.OK, "마이페이지를 성공적으로 불러왔습니다."),
 
     /**
      * House
