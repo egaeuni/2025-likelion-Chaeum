@@ -14,11 +14,12 @@ public enum ResponseCode {
     SUCCESS_LOGIN(HttpStatus.OK, "로그인을 성공했습니다."),
     SUCCESS_ONBOARDING(HttpStatus.OK, "온보딩을 완료하였습니다."),
 
+    SUCCESS_GET_HOUSELIST(HttpStatus.OK, "내가 등록한 집 리스트를 성공적으로 불러왔습니다."),
+
     /**
      * House
      */
     SUCCESS_CREATE(HttpStatus.CREATED, "집이 등록되었습니다.");
-
     private final HttpStatus status;
     private final String message;
 

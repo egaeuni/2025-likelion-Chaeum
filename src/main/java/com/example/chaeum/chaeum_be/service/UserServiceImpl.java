@@ -4,13 +4,13 @@ import com.example.chaeum.chaeum_be.code.ErrorCode;
 import com.example.chaeum.chaeum_be.code.ResponseCode;
 import com.example.chaeum.chaeum_be.dto.response.ErrorResponseDTO;
 import com.example.chaeum.chaeum_be.dto.response.ResponseDTO;
-import com.example.chaeum.chaeum_be.dto.user.LoginRequestDTO;
-import com.example.chaeum.chaeum_be.dto.user.OnboardingRequestDTO;
-import com.example.chaeum.chaeum_be.dto.user.RegisterDTO;
+import com.example.chaeum.chaeum_be.dto.user.*;
+import com.example.chaeum.chaeum_be.entity.House;
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.entity.UserPreference;
 import com.example.chaeum.chaeum_be.enums.PurposeType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
+import com.example.chaeum.chaeum_be.repository.HouseRepository;
 import com.example.chaeum.chaeum_be.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final HouseRepository houseRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -130,5 +133,37 @@ public class UserServiceImpl implements UserService{
         String email = dto.getEmail();
         return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    // 내가 등록한 집 리스트
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> mypage(MyPageDTO dto) {
+        // 로그인 한 유저 확인
+        User user = userRepository.findUserByEmail(dto.getEmail())
+                .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
+
+        List<House> houses = houseRepository.findByOwnerId(user.getId());
+
+        List<MyHouseListDTO> myHouseList = houses.stream()
+                .map(house -> MyHouseListDTO.builder()
+                        .id(house.getId())
+                        .title(house.getTitle())
+                        .saleType(house.getSaleType())
+                        .dealType(house.getDealType())
+                        .depositRent(house.getDepositRent())
+                        .area(house.getArea())
+                        .address(house.getAddress())
+                        .thumbnailUrl(
+                                house.getImages() != null && !house.getImages().isEmpty()
+                                        ? house.getImages().get(0).getImageUrl()
+                                        : null
+                        )
+                        .build()
+                ).toList();
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_HOUSELIST.getStatus().value())
+                .body(new ResponseDTO<>(ResponseCode.SUCCESS_GET_HOUSELIST, dto));
     }
 }
