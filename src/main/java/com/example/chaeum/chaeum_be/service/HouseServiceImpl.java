@@ -14,11 +14,10 @@ import com.example.chaeum.chaeum_be.entity.HouseImage;
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +103,44 @@ public class HouseServiceImpl implements HouseService {
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_CREATE.getStatus().value())
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_CREATE, houseResponseDTO));
+    }
+
+    // 집 상세정보
+    @Transactional(readOnly=true)
+    @Override
+    public ResponseEntity<?> detail(Long houseId, User loginUser) {
+        House house = houseRepository.findById(houseId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.HOUSE_NOT_FOUND));
+
+        List<String> imageUrls = house.getImages().stream()
+                .map(HouseImage::getImageUrl)
+                .toList();
+
+        HouseResponseDTO dto = HouseResponseDTO.builder()
+                .id(house.getId())
+                .address(house.getAddress())
+                .dealType(house.getDealType())
+                .saleType(house.getSaleType())
+                .title(house.getTitle())
+                .depositRent(house.getDepositRent())
+                .area(house.getArea())
+                .moveInAvailableDate(house.getMoveInAvailableDate())
+                .currentJeonse(house.getCurrentJeonse())
+                .currentDepositRent(house.getCurrentDepositRent())
+                .roomCount(house.getRoomCount())
+                .direction(house.getDirection())
+                .parkingSpace(house.getParkingSpace())
+                .heatingType(house.getHeatingType())
+                .transportation(house.getTransportation())
+                .facilities(house.getFacilities())
+                .options(house.getOptions())
+                .etc(house.getEtc())
+                .imageUrls(imageUrls)
+                .build();
+
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_READ_HOUSE.getStatus().value())
+                .body(new ResponseDTO<>(ResponseCode.SUCCESS_READ_HOUSE, dto));
     }
 
     // 집 수정

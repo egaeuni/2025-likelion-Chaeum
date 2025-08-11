@@ -10,4 +10,5 @@ public interface HouseService {
     ResponseEntity<?> createNewHouse(HouseCreateDTO dto, User loginUser);
     ResponseEntity<?> updateHouse(Long houseId, HouseUpdateDTO dto, User loginUser);
     ResponseEntity<?> updateHouseImages(Long houseId, HouseImageUpdateDTO dto, User loginUser);
+    ResponseEntity<?> detail(Long houseId, User loginUser);
 }

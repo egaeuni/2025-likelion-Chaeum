@@ -5,7 +5,6 @@ import com.example.chaeum.chaeum_be.dto.house.HouseImageUpdateDTO;
 import com.example.chaeum.chaeum_be.dto.house.HouseCreateDTO;
 import com.example.chaeum.chaeum_be.dto.house.HouseUpdateDTO;
 import com.example.chaeum.chaeum_be.dto.response.ErrorResponseDTO;
-import com.example.chaeum.chaeum_be.dto.response.ResponseDTO;
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.service.HouseService;
 import com.example.chaeum.chaeum_be.service.ScrapService;
@@ -34,6 +33,20 @@ public class HouseController {
                     .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
         }
         return houseService.createNewHouse(dto, loginUser);
+    }
+
+    @Operation(
+            summary = "집 상세 정보",
+            description = "집의 상세 정보를 조회할 수 있습니다."
+    )
+    @GetMapping("house/{houseId}")
+    public ResponseEntity<?> detail(@PathVariable Long houseId, HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
+                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
+        }
+        return houseService.detail(houseId, loginUser);
     }
 
     @Operation(
