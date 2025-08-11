@@ -10,8 +10,8 @@ import com.example.chaeum.chaeum_be.dto.user.RegisterDTO;
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.UserRepository;
+import com.example.chaeum.chaeum_be.service.ScrapService;
 import com.example.chaeum.chaeum_be.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +27,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final ScrapService scrapService;
 
     // 회원가입
     @PostMapping("/register")
@@ -89,5 +90,16 @@ public class UserController {
                     .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
         }
         return userService.myhouse(loginUser.getId());
+    }
+
+    // 내가 스크랩한 집 리스트
+    @GetMapping("/user/myscrap")
+    public ResponseEntity<?> myscrap(HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
+                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
+        }
+        return scrapService.myscrap(loginUser);
     }
 }

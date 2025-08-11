@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MyHouseListDTO {
+public class HouseListDTO {
     private Long id;
     private String title;
     private SaleType saleType;

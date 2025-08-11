@@ -163,8 +163,8 @@ public class UserServiceImpl implements UserService{
 
         List<House> houses = houseRepository.findByOwnerId(user.getId());
 
-        List<MyHouseListDTO> myHouseList = houses.stream()
-                .map(house -> MyHouseListDTO.builder()
+        List<HouseListDTO> myHouseList = houses.stream()
+                .map(house -> HouseListDTO.builder()
                         .id(house.getId())
                         .title(house.getTitle())
                         .saleType(house.getSaleType())
