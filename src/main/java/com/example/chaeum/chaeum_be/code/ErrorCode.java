@@ -18,11 +18,12 @@ public enum ErrorCode {
     ALREADY_ONBOARDED(HttpStatus.BAD_REQUEST, "이미 온보딩을 완료한 사용자입니다."),
 
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "사진은 최대 5장까지 등록할 수 있어요."),
+    CANNOT_SCRAP_OWN_HOUSE(HttpStatus.BAD_REQUEST, "본인이 등록한 집은 스크랩할 수 없습니다."),
     /**
      * 401 UNAUTHORIZED - 인증 실패
      */
     PASSWORD_NOT_CORRECT(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
-    UNAUTHORIZED_UESR(HttpStatus.UNAUTHORIZED, "로그인 유저만 사용 가능합니다."),
+    UNAUTHORIZED_UESR(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
 
     /**
      * 403 FORBIDDEN - 권한 없음
@@ -33,7 +34,7 @@ public enum ErrorCode {
      * 404 NOT_FOUND - 요청한 리소스를 찾을 수 없음
      */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일을 가진 사용자가 존재하지 않습니다."),
-
+    HOUSE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 id를 가진 집을 찾을 수 없습니다"),
 
     /**
      * 406 NOT_ACCEPTABLE - 허용되지 않는 요청 형식
@@ -45,7 +46,7 @@ public enum ErrorCode {
      */
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
     DUPLICATE_PHONENUM(HttpStatus.CONFLICT, "이미 사용 중인 전화번호입니다."),
-
+    ALREDY_SCRAPPED(HttpStatus.CONFLICT, "이미 스크랩한 집입니다."),
 
     /**
      * 502 BAD_GATEWAY - 이트웨이 또는 프록시 서버 오류
