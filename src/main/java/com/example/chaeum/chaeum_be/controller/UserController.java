@@ -1,7 +1,9 @@
 package com.example.chaeum.chaeum_be.controller;
 
 import com.example.chaeum.chaeum_be.code.ErrorCode;
+import com.example.chaeum.chaeum_be.code.ResponseCode;
 import com.example.chaeum.chaeum_be.dto.response.ErrorResponseDTO;
+import com.example.chaeum.chaeum_be.dto.response.ResponseDTO;
 import com.example.chaeum.chaeum_be.dto.user.LoginRequestDTO;
 import com.example.chaeum.chaeum_be.dto.user.OnboardingRequestDTO;
 import com.example.chaeum.chaeum_be.dto.user.RegisterDTO;
@@ -9,6 +11,7 @@ import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.UserRepository;
 import com.example.chaeum.chaeum_be.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +46,14 @@ public class UserController {
         }
         return loginResponse;
 
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session){
+        session.invalidate();
+        return ResponseEntity.status(ResponseCode.SUCCESS_LOGOUT.getStatus().value())
+                .body(new ResponseDTO<>(ResponseCode.SUCCESS_LOGOUT));
     }
 
     // 온보딩

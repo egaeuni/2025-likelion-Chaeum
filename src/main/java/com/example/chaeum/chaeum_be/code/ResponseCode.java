@@ -3,6 +3,7 @@ package com.example.chaeum.chaeum_be.code;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.support.HttpAccessor;
 
 @RequiredArgsConstructor
 @Getter
@@ -16,6 +17,7 @@ public enum ResponseCode {
 
     SUCCESS_GET_HOUSELIST(HttpStatus.OK, "내가 등록한 집 리스트를 성공적으로 불러왔습니다."),
     SUCCESS_GET_MYPAGE(HttpStatus.OK, "마이페이지를 성공적으로 불러왔습니다."),
+    SUCCESS_LOGOUT(HttpStatus.OK, "로그아웃을 성공했습니다."),
 
     /**
      * House

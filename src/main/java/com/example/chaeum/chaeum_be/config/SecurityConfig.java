@@ -32,7 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().permitAll()
                 )
-                .formLogin(login -> login.disable());
+                .formLogin(login -> login.disable())
+                .logout(logout -> logout.disable());
         return http.build();
     }
 
