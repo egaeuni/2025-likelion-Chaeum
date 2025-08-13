@@ -98,6 +98,7 @@ public class HouseServiceImpl implements HouseService {
                 .options(savedHouse.getOptions())
                 .etc(savedHouse.getEtc())
                 .imageUrls(savedImageUrls)
+                .postedOn(savedHouse.getPostedOn())
                 .build();
 
         return ResponseEntity
@@ -136,6 +137,7 @@ public class HouseServiceImpl implements HouseService {
                 .options(house.getOptions())
                 .etc(house.getEtc())
                 .imageUrls(imageUrls)
+                .postedOn(house.getPostedOn())
                 .build();
 
         return ResponseEntity
@@ -200,6 +202,7 @@ public class HouseServiceImpl implements HouseService {
                 .options(house.getOptions())
                 .etc(house.getEtc())
                 .imageUrls(imageUrls)
+                .postedOn(house.getPostedOn())
                 .build();
 
         return ResponseEntity

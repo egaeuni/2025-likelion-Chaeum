@@ -4,7 +4,9 @@ import com.example.chaeum.chaeum_be.enums.DealType;
 import com.example.chaeum.chaeum_be.enums.SaleType;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -31,4 +33,5 @@ public class HouseResponseDTO {
     private String facilities;
     private String options;
     private String etc;
+    private LocalDate postedOn;
 }
