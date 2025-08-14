@@ -99,6 +99,7 @@ public class HouseServiceImpl implements HouseService {
                 .etc(savedHouse.getEtc())
                 .imageUrls(savedImageUrls)
                 .postedOn(savedHouse.getPostedOn())
+                .phoneNum(savedHouse.getOwner() != null ? savedHouse.getOwner().getPhoneNum(): null)
                 .build();
 
         return ResponseEntity
@@ -138,6 +139,7 @@ public class HouseServiceImpl implements HouseService {
                 .etc(house.getEtc())
                 .imageUrls(imageUrls)
                 .postedOn(house.getPostedOn())
+                .phoneNum(house.getOwner() != null ? house.getOwner().getPhoneNum(): null)
                 .build();
 
         return ResponseEntity
@@ -203,6 +205,7 @@ public class HouseServiceImpl implements HouseService {
                 .etc(house.getEtc())
                 .imageUrls(imageUrls)
                 .postedOn(house.getPostedOn())
+                .phoneNum(house.getOwner() != null ? house.getOwner().getPhoneNum() : null)
                 .build();
 
         return ResponseEntity
