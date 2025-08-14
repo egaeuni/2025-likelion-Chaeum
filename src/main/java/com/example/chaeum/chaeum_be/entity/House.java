@@ -3,7 +3,9 @@ package com.example.chaeum.chaeum_be.entity;
 import com.example.chaeum.chaeum_be.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,42 +83,6 @@ public class House {
     @JoinColumn(name = "user_id")
     private User owner;
 
-    public void update(
-            String address,
-            DealType dealType,
-            SaleType saleType,
-            String title,
-            Long depositRent,
-            Double area,
-            String moveInAvailableDate,
-            Long currentJeonse,
-            Long currentDepositRent,
-            Integer roomCount,
-            String direction,
-            Integer parkingSpace,
-            String heatingType,
-            String transportation,
-            String facilities,
-            String options,
-            String etc
-    ) {
-        if (address != null && !address.isBlank()) this.address = address;
-        if (title != null && !title.isBlank()) this.title = title;
-        if (moveInAvailableDate != null && !moveInAvailableDate.isBlank()) this.moveInAvailableDate = moveInAvailableDate;
-        if (direction != null && !direction.isBlank()) this.direction = direction;
-        if (heatingType != null && !heatingType.isBlank()) this.heatingType = heatingType;
-        if (transportation != null && !transportation.isBlank()) this.transportation = transportation;
-        if (facilities != null && !facilities.isBlank()) this.facilities = facilities;
-        if (options != null && !options.isBlank()) this.options = options;
-        if (etc != null && !etc.isBlank()) this.etc = etc;
-
-        if (dealType != null) this.dealType = dealType;
-        if (saleType != null) this.saleType = saleType;
-        if (depositRent != null) this.depositRent = depositRent;
-        if (area != null) this.area = area;
-        if (currentJeonse != null) this.currentJeonse = currentJeonse;
-        if (currentDepositRent != null) this.currentDepositRent = currentDepositRent;
-        if (roomCount != null) this.roomCount = roomCount;
-        if (parkingSpace != null) this.parkingSpace = parkingSpace;
-    }
+    @CreationTimestamp
+    private LocalDate postedOn;
 }
