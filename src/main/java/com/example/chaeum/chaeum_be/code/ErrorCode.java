@@ -51,6 +51,8 @@ public enum ErrorCode {
     /**
      * 502 BAD_GATEWAY - 이트웨이 또는 프록시 서버 오류
      */
+    API_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "공공 API 요청에 실패했습니다."),
+    DATA_PARSING_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "공공 API 데이터 파싱에 실패했습니다."),
 
     SAMPLE_EXCEPTION(HttpStatus.BAD_REQUEST, "샘플 예외입니다.");
 
