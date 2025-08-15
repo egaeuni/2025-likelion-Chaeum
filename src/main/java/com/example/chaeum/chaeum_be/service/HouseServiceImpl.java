@@ -15,6 +15,7 @@ import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.enums.SourceType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
+import com.example.chaeum.chaeum_be.util.AddressRegionExtractor;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,7 @@ public class HouseServiceImpl implements HouseService {
                 .owner(loginUser)
                 .source(SourceType.USER)    // 사용자 집 등록
                 .readOnly(false)
+                .region(AddressRegionExtractor.extract(dto.getAddress()))
                 .build();
 
         // 이미지 처리 및 house에 연결
@@ -103,6 +105,7 @@ public class HouseServiceImpl implements HouseService {
                 .imageUrls(savedImageUrls)
                 .postedOn(savedHouse.getPostedOn())
                 .phoneNum(savedHouse.getOwner() != null ? savedHouse.getOwner().getPhoneNum(): null)
+                .region(savedHouse.getRegion())
                 .build();
 
         return ResponseEntity
@@ -143,6 +146,7 @@ public class HouseServiceImpl implements HouseService {
                 .imageUrls(imageUrls)
                 .postedOn(house.getPostedOn())
                 .phoneNum(house.getOwner() != null ? house.getOwner().getPhoneNum(): null)
+                .region(house.getRegion())
                 .build();
 
         return ResponseEntity
@@ -171,7 +175,10 @@ public class HouseServiceImpl implements HouseService {
         assertOwner(house, loginUser);
 
         if (dto.getTitle() != null) house.setTitle(dto.getTitle());
-        if (dto.getAddress() != null) house.setAddress(dto.getAddress());
+        if (dto.getAddress() != null) {
+            house.setAddress(dto.getAddress());
+            house.setRegion(AddressRegionExtractor.extract(dto.getAddress()));
+        }
         if (dto.getDealType() != null) house.setDealType(dto.getDealType());
         if (dto.getSaleType() != null) house.setSaleType(dto.getSaleType());
         if (dto.getDepositRent() != null) house.setDepositRent(dto.getDepositRent());
@@ -219,6 +226,7 @@ public class HouseServiceImpl implements HouseService {
                 .imageUrls(imageUrls)
                 .postedOn(house.getPostedOn())
                 .phoneNum(house.getOwner() != null ? house.getOwner().getPhoneNum() : null)
+                .region(house.getRegion())
                 .build();
 
         return ResponseEntity

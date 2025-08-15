@@ -2,6 +2,7 @@ package com.example.chaeum.chaeum_be.dto.house;
 
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.enums.DealType;
+import com.example.chaeum.chaeum_be.enums.RegionType;
 import com.example.chaeum.chaeum_be.enums.SaleType;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,4 +38,6 @@ public class HouseResponseDTO {
     private LocalDate postedOn;
 
     private String phoneNum;
+
+    private RegionType region;
 }
