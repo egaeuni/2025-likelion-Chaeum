@@ -12,6 +12,7 @@ import com.example.chaeum.chaeum_be.dto.response.ResponseDTO;
 import com.example.chaeum.chaeum_be.entity.House;
 import com.example.chaeum.chaeum_be.entity.HouseImage;
 import com.example.chaeum.chaeum_be.entity.User;
+import com.example.chaeum.chaeum_be.enums.SourceType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +57,8 @@ public class HouseServiceImpl implements HouseService {
                 .options(dto.getOptions())
                 .etc(dto.getEtc())
                 .owner(loginUser)
+                .source(SourceType.USER)    // 사용자 집 등록
+                .readOnly(false)
                 .build();
 
         // 이미지 처리 및 house에 연결
@@ -147,6 +150,15 @@ public class HouseServiceImpl implements HouseService {
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_READ_HOUSE, dto));
     }
 
+
+    // 읽기 전용(공공) 매물은 수정 불가
+    private void assertNotPublic(House house) {
+        if (house.getSource() == SourceType.PUBLIC || Boolean.TRUE.equals(house.getReadOnly())) {
+            throw new GlobalException(ErrorCode.NOT_UPDATE);
+        }
+    }
+
+
     // 집 수정
     @Transactional
     @Override
@@ -154,6 +166,8 @@ public class HouseServiceImpl implements HouseService {
         House house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.HOUSE_NOT_FOUND));
 
+        // 공공/읽기전용 차단!
+        assertNotPublic(house);
         assertOwner(house, loginUser);
 
         if (dto.getTitle() != null) house.setTitle(dto.getTitle());
@@ -168,7 +182,6 @@ public class HouseServiceImpl implements HouseService {
         if (dto.getDirection() != null) house.setDirection(dto.getDirection());
         if (dto.getParkingSpace() != null) house.setParkingSpace(dto.getParkingSpace());
         if (dto.getHeatingType() != null) house.setHeatingType(dto.getHeatingType());
-        if (dto.getTransportation() != null) house.setTransportation(dto.getTransportation());
         if (dto.getTransportation() != null) house.setTransportation(dto.getTransportation());
         if (dto.getFacilities() != null) house.setFacilities(dto.getFacilities());
         if (dto.getOptions() != null) house.setOptions(dto.getOptions());
@@ -220,6 +233,7 @@ public class HouseServiceImpl implements HouseService {
         House house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.HOUSE_NOT_FOUND));
 
+        assertNotPublic(house);
         assertOwner(house, loginUser);
 
         // 기존 이미지 삭제
