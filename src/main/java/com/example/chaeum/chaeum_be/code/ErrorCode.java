@@ -28,6 +28,7 @@ public enum ErrorCode {
     /**
      * 403 FORBIDDEN - 권한 없음
      */
+    NOT_UPDATE(HttpStatus.FORBIDDEN, "공공데이터는 수정할 수 없습니다."),
 
 
     /**

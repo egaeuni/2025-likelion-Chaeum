@@ -20,6 +20,13 @@ public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    // 추가 정보 삽입
+    @Enumerated(EnumType.STRING)
+    private SourceType source;     // USER(기본), PUBLIC(공공 이식)
+
+    private String  externalId;    // 공공 원본 식별자
+    private Boolean readOnly;      // PUBLIC이면 true
 
     // 주소
     private String address;
