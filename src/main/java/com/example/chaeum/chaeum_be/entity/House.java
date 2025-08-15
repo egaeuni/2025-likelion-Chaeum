@@ -31,6 +31,9 @@ public class House {
     // 주소
     private String address;
 
+    @Enumerated(EnumType.STRING)
+    private RegionType region;
+
     // 거래 방식
     @Enumerated(EnumType.STRING)
     private DealType dealType;

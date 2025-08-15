@@ -6,6 +6,7 @@ import com.example.chaeum.chaeum_be.enums.SaleType;
 import com.example.chaeum.chaeum_be.enums.SourceType;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
 import com.example.chaeum.chaeum_be.repository.PublicHouseRepository;
+import com.example.chaeum.chaeum_be.util.AddressRegionExtractor;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,9 @@ public class PublicToHouseImportServiceImpl implements PublicToHouseImportServic
             // 5) address & saleType만 저장, 나머지는 null 유지
             h.setAddress(safe(p.getAddress()));
             h.setSaleType(mappedSaleType);
+            
+            // 6) 지역 필드 따로 저장
+            h.setRegion(AddressRegionExtractor.extract(p.getAddress()));
 
             houseRepo.save(h);
             migrated++;
