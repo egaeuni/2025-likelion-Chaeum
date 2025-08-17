@@ -22,8 +22,8 @@ public class HouseFilterRequestDTO {
     private boolean userOnly = true;
 
     // data가 많아서 페이지네이션 처리
-    @Builder.Default private int page = 0;
-    @Builder.Default private int size = 20;
+    private Integer page;
+    private Integer size;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class PriceRange {
