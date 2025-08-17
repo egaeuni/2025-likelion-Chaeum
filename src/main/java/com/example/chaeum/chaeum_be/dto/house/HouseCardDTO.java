@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class HouseCardDto {
+public class HouseCardDTO {
     private Long id;
     private SourceType source;
     private RegionType region;

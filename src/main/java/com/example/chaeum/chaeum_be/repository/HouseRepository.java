@@ -15,7 +15,4 @@ public interface HouseRepository extends JpaRepository<House, Long>, JpaSpecific
     // 공공 API 이식용
     Optional<House> findBySourceAndExternalId(SourceType source, String externalId);
     boolean existsBySourceAndExternalId(SourceType source, String externalId);
-
-    // House 필터링
-
 }
