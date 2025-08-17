@@ -1,4 +1,3 @@
-// com/example/chaeum/chaeum_be/service/MainServiceImpl.java
 package com.example.chaeum.chaeum_be.service;
 
 import com.example.chaeum.chaeum_be.dto.main.MainSectionResponseDTO;
@@ -45,6 +44,7 @@ public class MainServiceImpl implements MainService {
                 .build();
     }
 
+    // 집 추천
     private List<HouseCardDTO> recommendForBuyer(UserPreference pref, int limit) {
         int size = Math.max(1, limit);
 

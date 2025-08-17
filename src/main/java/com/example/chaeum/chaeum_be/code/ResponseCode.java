@@ -25,7 +25,11 @@ public enum ResponseCode {
      */
     SUCCESS_CREATE(HttpStatus.CREATED, "집이 성공적으로 등록되었습니다."),
     SUCCESS_UPDATE_HOUSE(HttpStatus.OK, "집이 성공적으로 수정되었습니다."),
-    SUCCESS_READ_HOUSE(HttpStatus.OK, "집 상세 정보를 성공적으로 불러왔습니다.");
+    SUCCESS_READ_HOUSE(HttpStatus.OK, "집 상세 정보를 성공적으로 불러왔습니다."),
+
+    SUCCESS_GET_ALL_HOUSELIST(HttpStatus.OK, "집 리스트를 성공적으로 불러왔습니다."),
+    SUCCESS_GET_MAIN(HttpStatus.OK, "메인 섹션을 성공적으로 불러왔습니다.");
+
 
     private final HttpStatus status;
     private final String message;

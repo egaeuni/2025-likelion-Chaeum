@@ -129,6 +129,7 @@ public class HouseServiceImpl implements HouseService {
 
         HouseResponseDTO dto = HouseResponseDTO.builder()
                 .id(house.getId())
+                .source(house.getSource())
                 .address(house.getAddress())
                 .dealType(house.getDealType())
                 .saleType(house.getSaleType())

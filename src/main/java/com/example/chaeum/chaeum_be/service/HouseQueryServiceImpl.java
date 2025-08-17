@@ -29,7 +29,7 @@ public class HouseQueryServiceImpl implements HouseQueryService {
 
         Specification<House> spec = Specification.where(null);
 
-        // 1) 사용자 등록만(체크 시)
+        // 1) 사용자 등록만
         if (r.isUserOnly()) {
             spec = spec.and((root, q, cb) -> cb.equal(root.get("source"), SourceType.USER));
         }
@@ -49,7 +49,7 @@ public class HouseQueryServiceImpl implements HouseQueryService {
             spec = spec.and((root, q, cb) -> root.get("dealType").in(r.getDealTypes()));
         }
 
-        // 5) 가격(다중 구간 OR) + null 제외
+        // 5) 가격(다중 구간 OR)
         if (r.getPriceRanges() != null && !r.getPriceRanges().isEmpty()) {
             spec = spec.and((root, q, cb) -> {
                 List<Predicate> orRanges = new ArrayList<>();
@@ -57,7 +57,7 @@ public class HouseQueryServiceImpl implements HouseQueryService {
 
                 r.getPriceRanges().forEach(pr -> {
                     List<Predicate> ands = new ArrayList<>();
-                    ands.add(cb.isNotNull(price));              // 공공 null 제거
+                    ands.add(cb.isNotNull(price));
                     if (pr.getMin() != null) ands.add(cb.ge(price, pr.getMin()));
                     if (pr.getMax() != null) ands.add(cb.le(price, pr.getMax()));
                     if (!ands.isEmpty()) {
@@ -65,13 +65,10 @@ public class HouseQueryServiceImpl implements HouseQueryService {
                     }
                 });
 
-                // 범위가 하나도 안 만들어졌으면 no-op
                 return orRanges.isEmpty() ? cb.conjunction() : cb.or(orRanges.toArray(new Predicate[0]));
             });
         }
 
-        // ---------- 페이징 처리 ----------
-        // size가 없거나 0/음수면 전체 조회(Pageable.unpaged) + 최신순 정렬
         Page<House> page;
         Sort sort = Sort.by(Sort.Direction.DESC, "postedOn");
 
