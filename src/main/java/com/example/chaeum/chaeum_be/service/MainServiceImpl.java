@@ -32,9 +32,17 @@ public class MainServiceImpl implements MainService {
         UserPreference pref = prefRepo.findByUser(me).orElse(null);
         PurposeType purpose = (pref == null ? PurposeType.BUY : pref.getPurpose());
 
-        List<HouseCardDTO> recommended =
-                (purpose == PurposeType.SELL) ? List.of() : recommendForBuyer(pref, RECO_LIMIT);
+        List<HouseCardDTO> recommended;
 
+        if (purpose == PurposeType.SELL) {
+            // 판매자도 집을 등록했다면, 내 집의 지역 기준으로 추천
+            recommended = recommendForSeller(me, RECO_LIMIT);
+        } else {
+            // 구매자/둘다 -> 온보딩 가중치 기반 추천
+            recommended = recommendForBuyer(pref, RECO_LIMIT);
+        }
+
+        // 방금 등록된 집
         List<HouseCardDTO> hot = latestUserHouses(HOT_LIMIT);
 
         return MainSectionResponseDTO.builder()
@@ -44,7 +52,44 @@ public class MainServiceImpl implements MainService {
                 .build();
     }
 
-    // 집 추천
+    // 판매자 추천
+    private List<HouseCardDTO> recommendForSeller(User me, int limit) {
+        // 1) 내가 등록한 최신 매물 1건 조회
+        Specification<House> myLatestSpec = (root, q, cb) ->
+                cb.and(
+                        cb.equal(root.get("source"), SourceType.USER),
+                        cb.equal(root.get("owner").get("id"), me.getId())
+                );
+        Page<House> myLatestPage = houseRepo.findAll(
+                myLatestSpec,
+                PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "postedOn"))
+        );
+        if (myLatestPage.isEmpty()) {
+            // 내 집이 없으면 추천 비움
+            return List.of();
+        }
+
+        House myLatest = myLatestPage.getContent().get(0);
+        RegionType region = myLatest.getRegion();
+        if (region == null) { return List.of(); }
+
+        // 2) 같은 region의 USER 매물에서 내 매물은 제외하고 최신순 추천
+        Specification<House> nearSpec = (root, q, cb) ->
+                cb.and(
+                        cb.equal(root.get("source"), SourceType.USER),
+                        cb.equal(root.get("region"), region),
+                        cb.notEqual(root.get("owner").get("id"), me.getId())
+                );
+
+        Page<House> nearPage = houseRepo.findAll(
+                nearSpec,
+                PageRequest.of(0, Math.max(1, limit), Sort.by(Sort.Direction.DESC, "postedOn"))
+        );
+
+        return toCardDtos(nearPage.getContent());
+    }
+
+    // 구매자, 둘다 추천
     private List<HouseCardDTO> recommendForBuyer(UserPreference pref, int limit) {
         int size = Math.max(1, limit);
 

@@ -20,6 +20,7 @@ public class HouseQueryController {
 
     private final HouseQueryService service;
 
+    @Operation(summary = "빈집 필터링, 지도 필터링")
     @PostMapping("/filter")
     public ResponseEntity<?> filter(@RequestBody HouseFilterRequestDTO req) {
         Page<HouseCardDTO> page = service.filter(req);
