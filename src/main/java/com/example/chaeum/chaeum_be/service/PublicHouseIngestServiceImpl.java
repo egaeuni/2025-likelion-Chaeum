@@ -25,13 +25,12 @@ public class PublicHouseIngestServiceImpl implements PublicHouseIngestService {
     private final ObjectMapper om = new ObjectMapper();
     private final RestTemplate rt = new RestTemplate();
 
-    // 운영 yml에 저장된 공공데이터포털 인코딩 서비스 키
     @Value("${openapi.odcloud.service-key}")
     private String serviceKey;
 
     // 기본값
     private static final String DEFAULT_TITLE        = "공공 빈집 매물";
-    private static final String DEFAULT_DEAL_TYPE    = "미정";   // 또는 "월세"
+    private static final String DEFAULT_DEAL_TYPE    = "미정";
     private static final String DEFAULT_DEPOSIT_RENT = "미정";
     private static final String DEFAULT_AREA         = "불확실";
     private static final String DEFAULT_POSTED_ON    = "불확실";
@@ -131,7 +130,7 @@ public class PublicHouseIngestServiceImpl implements PublicHouseIngestService {
                         .queryParam("page", 1)
                         .queryParam("perPage", 10)
                         .queryParam("serviceKey", serviceKey)
-                        .build(true) // 서비스키 재인코딩 금지
+                        .build(true)
                         .toUri();
 
                 HttpHeaders headers = new HttpHeaders();
@@ -167,12 +166,11 @@ public class PublicHouseIngestServiceImpl implements PublicHouseIngestService {
                     String address  = normalize(addressRaw);
                     String saleType = normalize(saleTypeRaw);
 
-                    // 중복이면 스킵(주소 + 매물종류)
+                    // 중복이면 스킵
                     if (repo.existsByAddressAndSaleType(address, saleType)) {
                         continue;
                     }
 
-                    // title, dealType, depositRent, area, postedOn, phoneNum만 기본값으로 채움
                     PublicHouse entity = PublicHouse.builder()
                             .address(address)                      // 공공 API
                             .saleType(saleType)                    // 공공 API
@@ -184,7 +182,7 @@ public class PublicHouseIngestServiceImpl implements PublicHouseIngestService {
                             .postedOn(DEFAULT_POSTED_ON)           // 기본값
                             .phoneNum(DEFAULT_PHONE_NUMBER)        // 기본값
 
-                            .currentJeonse(null)                   // 나머지는 null - 선택값은 무조건 null로 반환
+                            .currentJeonse(null)                   // 나머지는 null
                             .currentDepositRent(null)
                             .roomCount(null)
                             .direction(null)
@@ -206,7 +204,7 @@ public class PublicHouseIngestServiceImpl implements PublicHouseIngestService {
                 log.info("[{}] inserted={}", inserted);
 
             } catch (GlobalException ge) {
-                throw ge; // 전역 예외 핸들러로 전달
+                throw ge;
             } catch (Exception e) {
                 log.error("[{}] 수집/파싱 오류", e);
                 throw new GlobalException(ErrorCode.DATA_PARSING_FAILED);
@@ -217,12 +215,9 @@ public class PublicHouseIngestServiceImpl implements PublicHouseIngestService {
         return total;
     }
 
-    // ---------- 유틸 ----------
-
     private static boolean isBlank(String s){ return s == null || s.isBlank(); }
     private static String normalize(String s){ return s.trim().replaceAll("\\s{2,}", " "); }
 
-    /** "a.b.c" 같은 점 경로로 배열 루트 찾기 */
     private static JsonNode atPath(JsonNode root, String dotPath) {
         if (root == null || dotPath == null || dotPath.isBlank()) return null;
         JsonNode cur = root;
@@ -233,7 +228,6 @@ public class PublicHouseIngestServiceImpl implements PublicHouseIngestService {
         return cur;
     }
 
-    /** 후보 키들 중 첫 텍스트 값 반환 */
     private static String firstText(JsonNode node, String[] keys) {
         if (node == null || keys == null) return null;
         for (String k : keys) {

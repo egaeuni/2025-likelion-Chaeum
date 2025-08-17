@@ -4,6 +4,7 @@ import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.enums.DealType;
 import com.example.chaeum.chaeum_be.enums.RegionType;
 import com.example.chaeum.chaeum_be.enums.SaleType;
+import com.example.chaeum.chaeum_be.enums.SourceType;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.cglib.core.Local;
@@ -15,6 +16,7 @@ import java.util.List;
 @Builder
 public class HouseResponseDTO {
     private Long id;
+    private SourceType source;
     private String address;
     private DealType dealType;
     private SaleType saleType;

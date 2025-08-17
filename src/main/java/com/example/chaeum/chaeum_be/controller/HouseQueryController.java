@@ -1,7 +1,9 @@
 package com.example.chaeum.chaeum_be.controller;
 
+import com.example.chaeum.chaeum_be.code.ResponseCode;
 import com.example.chaeum.chaeum_be.dto.house.HouseCardDTO;
 import com.example.chaeum.chaeum_be.dto.house.HouseFilterRequestDTO;
+import com.example.chaeum.chaeum_be.dto.response.ResponseDTO;
 import com.example.chaeum.chaeum_be.service.HouseQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +20,17 @@ public class HouseQueryController {
 
     private final HouseQueryService service;
 
-    @Operation(
-            summary = "집 리스트",
-            description = "집을 필터링하여 리스트를 띄웁니다."
-    )
+    @Operation(summary = "빈집 필터링, 지도 필터링")
     @PostMapping("/filter")
-    public ResponseEntity<List<HouseCardDTO>> filter(@RequestBody HouseFilterRequestDTO req) {
+    public ResponseEntity<?> filter(@RequestBody HouseFilterRequestDTO req) {
         Page<HouseCardDTO> page = service.filter(req);
-        return ResponseEntity.ok(page.getContent());
 
+        return ResponseEntity
+                .status(ResponseCode.SUCCESS_GET_ALL_HOUSELIST.getStatus().value())
+                .body(new ResponseDTO<>(
+                        ResponseCode.SUCCESS_GET_ALL_HOUSELIST,
+                        page.getContent()
+                ));
     }
 }
+
