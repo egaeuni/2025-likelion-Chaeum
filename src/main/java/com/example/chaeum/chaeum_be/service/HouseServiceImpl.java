@@ -15,6 +15,7 @@ import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.enums.SourceType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
+import com.example.chaeum.chaeum_be.repository.UserPreferenceRepository;
 import com.example.chaeum.chaeum_be.util.AddressRegionExtractor;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HouseServiceImpl implements HouseService {
+
     private final HouseRepository houseRepository;
+    private final UserPreferenceRepository prefRepo;
 
     @Override
     public ResponseEntity<?> createNewHouse(HouseCreateDTO dto, User loginUser) {

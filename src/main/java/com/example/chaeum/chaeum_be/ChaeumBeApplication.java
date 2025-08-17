@@ -9,5 +9,4 @@ public class ChaeumBeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ChaeumBeApplication.class, args);
 	}
-
 }

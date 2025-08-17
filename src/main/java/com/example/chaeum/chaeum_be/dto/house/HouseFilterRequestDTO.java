@@ -8,7 +8,7 @@ import lombok.*;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class HouseFilterRequest {
+public class HouseFilterRequestDTO {
     private RegionType region;
 
     // 다중 선택

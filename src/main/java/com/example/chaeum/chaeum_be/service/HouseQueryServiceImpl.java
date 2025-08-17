@@ -1,7 +1,7 @@
 package com.example.chaeum.chaeum_be.service;
 
-import com.example.chaeum.chaeum_be.dto.house.HouseCardDto;
-import com.example.chaeum.chaeum_be.dto.house.HouseFilterRequest;
+import com.example.chaeum.chaeum_be.dto.house.HouseCardDTO;
+import com.example.chaeum.chaeum_be.dto.house.HouseFilterRequestDTO;
 import com.example.chaeum.chaeum_be.entity.House;
 import com.example.chaeum.chaeum_be.enums.SourceType;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
@@ -23,7 +23,7 @@ public class HouseQueryServiceImpl implements HouseQueryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<HouseCardDto> filter(HouseFilterRequest r) {
+    public Page<HouseCardDTO> filter(HouseFilterRequestDTO r) {
 
         Specification<House> spec = Specification.where(null);
 
@@ -53,7 +53,7 @@ public class HouseQueryServiceImpl implements HouseQueryService {
                 List<Predicate> orRanges = new ArrayList<>();
                 Path<Long> price = root.get("depositRent");
 
-                for (HouseFilterRequest.PriceRange pr : r.getPriceRanges()) {
+                for (HouseFilterRequestDTO.PriceRange pr : r.getPriceRanges()) {
                     List<Predicate> ands = new ArrayList<>();
                     ands.add(cb.isNotNull(price)); // 공공 null 걸러짐
                     if (pr.getMin() != null) ands.add(cb.ge(price, pr.getMin()));
@@ -69,8 +69,8 @@ public class HouseQueryServiceImpl implements HouseQueryService {
 
         Page<House> page = repo.findAll(spec, pageable);
 
-        List<HouseCardDto> content = page.getContent().stream().map(h ->
-                HouseCardDto.builder()
+        List<HouseCardDTO> content = page.getContent().stream().map(h ->
+                HouseCardDTO.builder()
                         .id(h.getId())
                         .source(h.getSource())
                         .region(h.getRegion())
