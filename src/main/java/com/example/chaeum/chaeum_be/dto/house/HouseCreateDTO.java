@@ -27,8 +27,7 @@ public class HouseCreateDTO {
     private DealType dealType;
 
     @Size(max = 5, message = "이미지는 최대 5장까지 첨부할 수 있습니다.")
-    @NotNull
-    private List<String> houseImages;
+    private List<MultipartFile> houseImages;
 
     @NotBlank(message = "제목 입력은 필수입니다.")
     private String title;

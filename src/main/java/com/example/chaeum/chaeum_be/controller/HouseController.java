@@ -7,31 +7,43 @@ import com.example.chaeum.chaeum_be.dto.house.HouseUpdateDTO;
 import com.example.chaeum.chaeum_be.dto.response.ErrorResponseDTO;
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.service.HouseService;
+import com.example.chaeum.chaeum_be.service.S3Uploader;
 import com.example.chaeum.chaeum_be.service.ScrapService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class HouseController {
     private final HouseService houseService;
     private final ScrapService scrapService;
+    private final S3Uploader s3Uploader;
+
 
     @Operation(
             summary = "집 등록",
             description = "집을 등록할 수 있습니다."
     )
-    @PostMapping("/house/new")
-    public ResponseEntity<?> create(@Valid @RequestBody HouseCreateDTO dto, HttpSession session) {
+    @PostMapping(value = "/house/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> create(@RequestPart(value = "house", required = false) @Valid HouseCreateDTO dto,
+                                    @RequestPart(value = "images", required = false) List<MultipartFile> images,
+                                    HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null) {
             return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
                     .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
         }
+        dto.setHouseImages(images);
         return houseService.createNewHouse(dto, loginUser);
     }
 
@@ -67,17 +79,27 @@ public class HouseController {
             summary = "집 사진 수정",
             description = "집 사진을 수정할 수 있습니다."
     )
-    @PatchMapping("house/update/{houseId}/image")
+    @PatchMapping(value = "house/update/{houseId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateHouseImages(
             @PathVariable Long houseId,
-            @RequestBody HouseImageUpdateDTO dto,
+            @RequestPart(value="images", required=false) List<MultipartFile> images,
             HttpSession session
-    ) {
+    ) throws IOException{
         User loginUser = (User) session.getAttribute("loginUser");
         if(loginUser == null) {
             return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
                     .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
         }
+
+        List<String> urls = new ArrayList<>();
+        if (images != null && !images.isEmpty()) {
+            for (MultipartFile file : images) {
+                String url = s3Uploader.upload(file, "houses");
+                urls.add(url);
+            }
+        }
+        HouseImageUpdateDTO dto = new HouseImageUpdateDTO();
+        dto.setImageUrls(urls);
 
         return houseService.updateHouseImages(houseId, dto, loginUser);
     }
