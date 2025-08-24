@@ -46,6 +46,8 @@ public class UserPreference {
 
     public void setUser(User user) {
         this.user = user;
-        if (user.getUserPreference() != this) user.setUserPreference(this);
+        if (user != null && user.getUserPreference() != this) {
+            user.setUserPreference(this);
+        };
     }
 }

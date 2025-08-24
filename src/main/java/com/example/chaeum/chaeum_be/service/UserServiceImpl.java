@@ -114,9 +114,13 @@ public class UserServiceImpl implements UserService{
                     .body(new ErrorResponseDTO(ErrorCode.ALREADY_ONBOARDED, null));
         }
 
-        UserPreference preference = new UserPreference();
-        preference.setUser(user);
-        preference.setPurpose(dto.getPurpose());
+        UserPreference preference = UserPreference.builder()
+                .user(user)
+                .purpose(dto.getPurpose())
+                .usagePurpose(dto.getUsagePurpose())
+                .additionalDetail(dto.getAdditionalDetail())
+                .usagePurposeEtcDetail(dto.getUsagePurposeEtcDetail())
+                .build();
 
         // Purpose가 BUY 또는 BOTH인데 usagePurpose가 비어있는 경우
         if ((dto.getPurpose() == PurposeType.BUY || dto.getPurpose() == PurposeType.BOTH)
@@ -135,13 +139,9 @@ public class UserServiceImpl implements UserService{
                     .body(new ErrorResponseDTO(ErrorCode.ETC_DETAIL_REQUIRED, null));
         }
 
-        preference.setUsagePurpose(dto.getUsagePurpose());
-        preference.setAdditionalDetail(dto.getAdditionalDetail());
-        preference.setUsagePurposeEtcDetail(dto.getUsagePurposeEtcDetail());
-
         user.setUserPreference(preference);
-
         user.setFirstLogin(false);
+
         userRepository.save(user);
 
         return ResponseEntity
