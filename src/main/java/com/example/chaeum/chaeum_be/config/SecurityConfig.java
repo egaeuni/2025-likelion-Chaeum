@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // CSRF 보호 기능을 비활성화합니다.
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/v3/api-docs/**",
@@ -28,22 +28,22 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-resources/**",
                                 "/webjars/**"
-                        ).permitAll()
-                        .requestMatchers("/api/**").permitAll()
-                        .anyRequest().permitAll()
+                        ).permitAll() // 스웨거 UI 관련 경로에 대한 접근을 허용합니다.
+                        .requestMatchers("/api/**").permitAll() // "/api" 경로에 대한 접근을 허용합니다.
+                        .anyRequest().permitAll() // 모든 다른 요청에 대한 접근을 허용합니다.
                 )
-                .formLogin(login -> login.disable())
-                .logout(logout -> logout.disable());
+                .formLogin(login -> login.disable()) // 기본 폼 로그인 페이지를 비활성화합니다.
+                .logout(logout -> logout.disable()); // 기본 로그아웃 처리를 비활성화합니다.
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*")); // 모든 도메인 허용
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedOriginPatterns(List.of("*")); // 모든 도메인에서의 요청을 허용합니다.
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드를 설정합니다.
+        configuration.setAllowedHeaders(List.of("*")); // 모든 헤더를 허용합니다.
+        configuration.setAllowCredentials(true); // 쿠키를 포함한 인증 정보 교환을 허용합니다.
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
