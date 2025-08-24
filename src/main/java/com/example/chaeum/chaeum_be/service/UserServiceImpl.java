@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService{
 
     // 로그인
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ResponseEntity<?> login(LoginRequestDTO dto) {
         String email = dto.getEmail();
         String password = dto.getPassword();
@@ -89,9 +89,17 @@ public class UserServiceImpl implements UserService{
                     .body(new ErrorResponseDTO(ErrorCode.PASSWORD_NOT_CORRECT, null));
         }
 
+        UserResponseDTO resp = UserResponseDTO.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .isFirstLogin(user.isFirstLogin())
+                .build();
+
+
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
-                .body(new ResponseDTO<>(ResponseCode.SUCCESS_LOGIN, dto));
+                .body(new ResponseDTO<>(ResponseCode.SUCCESS_LOGIN, resp));
     }
 
     // 온보딩
