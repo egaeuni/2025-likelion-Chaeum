@@ -71,13 +71,13 @@ public class SecurityConfig {
     // SameSite=None을 위한 Tomcat 설정
     @Bean
     public ServletWebServerFactory servletContainer() {
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-        tomcat.addContextCustomizers(context -> {
-            Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
-            cookieProcessor.setSameSiteCookies("None"); // SameSite=None
-            context.setCookieProcessor(cookieProcessor);
-            context.getServletContext().getSessionCookieConfig().setSecure(true);
-        });
-        return tomcat;
+        //TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        //tomcat.addContextCustomizers(context -> {
+            //Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
+            //cookieProcessor.setSameSiteCookies("None"); // SameSite=None
+            //context.setCookieProcessor(cookieProcessor);
+            //context.getServletContext().getSessionCookieConfig().setSecure(true);
+        //});
+        //return tomcat;
     }
 }
