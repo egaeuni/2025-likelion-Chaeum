@@ -74,8 +74,9 @@ public class SecurityConfig {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
         tomcat.addContextCustomizers(context -> {
             Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
-            cookieProcessor.setSameSiteCookies("None");
+            cookieProcessor.setSameSiteCookies("None"); // SameSite=None
             context.setCookieProcessor(cookieProcessor);
+            context.getServletContext().getSessionCookieConfig().setSecure(true);
         });
         return tomcat;
     }

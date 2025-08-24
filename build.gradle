@@ -47,6 +47,8 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.571'
 }
 
+ext['tomcat.version'] = '9.0.70'
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
