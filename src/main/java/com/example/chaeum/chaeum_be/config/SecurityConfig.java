@@ -30,6 +30,7 @@ public class SecurityConfig {
                                 "/webjars/**"
                         ).permitAll()
                         .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/user/**", "/onboarding").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(login -> login.disable())
