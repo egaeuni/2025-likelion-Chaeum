@@ -9,6 +9,7 @@ import com.example.chaeum.chaeum_be.entity.House;
 import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.entity.UserPreference;
 import com.example.chaeum.chaeum_be.enums.PurposeType;
+import com.example.chaeum.chaeum_be.enums.UsagePurposeType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
 import com.example.chaeum.chaeum_be.repository.UserRepository;
@@ -117,6 +118,7 @@ public class UserServiceImpl implements UserService{
         preference.setUser(user);
         preference.setPurpose(dto.getPurpose());
 
+        // Purpose가 BUY 또는 BOTH인데 usagePurpose가 비어있는 경우
         if ((dto.getPurpose() == PurposeType.BUY || dto.getPurpose() == PurposeType.BOTH)
                 && (dto.getUsagePurpose() == null || dto.getUsagePurpose().isEmpty())) {
             return ResponseEntity
@@ -124,8 +126,18 @@ public class UserServiceImpl implements UserService{
                     .body(new ErrorResponseDTO(ErrorCode.USAGE_PURPOSE_REQUIRED_FOR_BUYERS, null));
         }
 
+        // ETC가 포함됐는데 usagePurposeEtcDetail이 비어있는 경우
+        if (dto.getUsagePurpose() != null &&
+                dto.getUsagePurpose().contains(UsagePurposeType.ETC) &&
+                (dto.getUsagePurposeEtcDetail() == null || dto.getUsagePurposeEtcDetail().isBlank())) {
+            return ResponseEntity
+                    .status(ErrorCode.ETC_DETAIL_REQUIRED.getStatus().value())
+                    .body(new ErrorResponseDTO(ErrorCode.ETC_DETAIL_REQUIRED, null));
+        }
+
         preference.setUsagePurpose(dto.getUsagePurpose());
         preference.setAdditionalDetail(dto.getAdditionalDetail());
+        preference.setUsagePurposeEtcDetail(dto.getUsagePurposeEtcDetail());
 
         user.setUserPreference(preference);
 

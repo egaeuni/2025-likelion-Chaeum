@@ -14,8 +14,8 @@ public class HouseListDTO {
     private String title;
     private SaleType saleType;
     private DealType dealType;
-    private Long depositRent;
-    private Double area;
+    private String depositRent;
+    private String area;
     private String address;
     private String thumbnailUrl;
 }

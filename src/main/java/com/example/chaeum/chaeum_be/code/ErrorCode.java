@@ -54,6 +54,7 @@ public enum ErrorCode {
      */
     API_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "공공 API 요청에 실패했습니다."),
     DATA_PARSING_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "공공 API 데이터 파싱에 실패했습니다."),
+    ETC_DETAIL_REQUIRED(HttpStatus. BAD_REQUEST, "ETC 상세 내용을 입력해야 합니다."),
 
     SAMPLE_EXCEPTION(HttpStatus.BAD_REQUEST, "샘플 예외입니다."),
     FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드를 실패했습니다.");

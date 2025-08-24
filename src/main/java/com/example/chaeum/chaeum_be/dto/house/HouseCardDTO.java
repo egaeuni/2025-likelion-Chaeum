@@ -18,8 +18,8 @@ public class HouseCardDTO {
     private SaleType saleType;
     private DealType dealType;
 
-    private Long depositRent;
-    private Double area;
+    private String depositRent;
+    private String area;
 
     private List<String> imageUrls;
     private LocalDate postedOn;
