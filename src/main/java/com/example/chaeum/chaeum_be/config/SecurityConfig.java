@@ -42,9 +42,10 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://43.202.45.241:*",
-                "http://localhost:*",
-                "http://127.0.0.1:*"
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "http://localhost:8080",
+                "http://43.202.45.241:8080"
         ));
 
         // configuration.setAllowedOriginPatterns(List.of("*")); // 모든 도메인에서의 요청을 허용합니다.
