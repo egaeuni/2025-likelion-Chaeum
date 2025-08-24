@@ -2,11 +2,9 @@ package com.example.chaeum.chaeum_be.config;
 
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.CookieSameSiteSupplier;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -37,9 +35,10 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // 모든 다른 요청에 대한 접근을 허용합니다.
                 )
                 .formLogin(login -> login.disable()) // 기본 폼 로그인 페이지를 비활성화합니다.
-                .logout(logout -> logout.disable()); // 기본 로그아웃 처리를 비활성화합니다.
+                .logout(logout -> logout.disable()) // 기본 로그아웃 처리를 비활성화합니다.
                 .sessionManagement(session -> session
-                .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED);
+                .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.IF_REQUIRED)
+        );
         return http.build();
     }
 
@@ -79,10 +78,5 @@ public class SecurityConfig {
             context.setCookieProcessor(cookieProcessor);
         });
         return tomcat;
-    }
-
-    @Bean
-    public CookieSameSiteSupplier cookieSameSiteSupplier() {
-        return CookieSameSiteSupplier.of(org.springframework.boot.web.servlet.server.Cookie.SameSite.NONE);
     }
 }
