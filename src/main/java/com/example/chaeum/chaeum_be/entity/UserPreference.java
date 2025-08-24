@@ -27,7 +27,11 @@ public class UserPreference {
 
     @ElementCollection(targetClass = UsagePurposeType.class)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_usage_purpose", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(
+            name = "user_usage_purpose",
+            joinColumns = @JoinColumn(name = "user_preference_id")
+    )
+    @Column(name = "usage_purpose")
     private List<UsagePurposeType> usagePurpose;
 
     @Column(length = 500)
