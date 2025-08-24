@@ -23,15 +23,15 @@ public class HouseResponseDTO {
     private List<String> imageUrls;
 
     private String title;
-    private Long depositRent;
-    private Double area;
+    private String depositRent;
+    private String area;
 
-    private Long currentJeonse;
-    private Long currentDepositRent;
+    private String currentJeonse;
+    private String currentDepositRent;
     private String moveInAvailableDate;
-    private Integer roomCount;
+    private String roomCount;
     private String direction;
-    private Integer parkingSpace;
+    private String parkingSpace;
     private String heatingType;
     private String transportation;
     private String facilities;

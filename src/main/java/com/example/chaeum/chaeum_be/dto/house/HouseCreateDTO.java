@@ -34,17 +34,17 @@ public class HouseCreateDTO {
     private String title;
 
     @NotNull(message = "보증금/임대료 입력은 필수입니다.")
-    private Long depositRent;
+    private String depositRent;
 
     @NotNull(message = "면적 입력은 필수입니다.")
-    private Double area;
+    private String area;
 
-    private Long currentJeonse;
-    private Long currentDepositRent;
+    private String currentJeonse;
+    private String currentDepositRent;
     private String moveInAvailableDate;
-    private Integer roomCount;
+    private String roomCount;
     private String direction;
-    private Integer parkingSpace;
+    private String parkingSpace;
     private String heatingType;
     private String transportation;
     private String facilities;

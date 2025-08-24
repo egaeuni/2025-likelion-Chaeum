@@ -46,28 +46,28 @@ public class House {
     private String title;
 
     // 보증금 / 매매가
-    private Long depositRent;
+    private String depositRent;
 
     // 면적
-    private Double area;
+    private String area;
 
     // 입주 가능일
     private String moveInAvailableDate;
 
     // 현재 전세금
-    private Long currentJeonse;
+    private String currentJeonse;
 
     // 현재 보증금/월세
-    private Long currentDepositRent;
+    private String currentDepositRent;
 
     // 방 개수
-    private Integer roomCount;
+    private String roomCount;
 
     // 방향
     private String direction;
 
     // 주차 가능 대수
-    private Integer parkingSpace;
+    private String parkingSpace;
 
     // 난방 형태
     private String  heatingType;
