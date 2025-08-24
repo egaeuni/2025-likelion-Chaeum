@@ -49,9 +49,6 @@ dependencies {
 	// Jakarta Servlet API
 	implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 }
-
-ext['tomcat.version'] = '9.0.70'
-
 tasks.named('test') {
 	useJUnitPlatform()
 }
