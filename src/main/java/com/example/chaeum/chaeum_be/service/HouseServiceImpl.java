@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +33,11 @@ public class HouseServiceImpl implements HouseService {
 
     private final HouseRepository houseRepository;
     private final UserPreferenceRepository prefRepo;
+    private final S3Uploader s3Uploader;
 
     @Override
     public ResponseEntity<?> createNewHouse(HouseCreateDTO dto, User loginUser) {
-        List<String> imageFiles = dto.getHouseImages();
+        List<MultipartFile> imageFiles = dto.getHouseImages();
 
         if (imageFiles != null && imageFiles.size() > 5) {
             return ResponseEntity
@@ -69,12 +72,17 @@ public class HouseServiceImpl implements HouseService {
         // 이미지 처리 및 house에 연결
         List<HouseImage> imageEntities = new ArrayList<>();
         if (imageFiles != null && !imageFiles.isEmpty()) {
-            for (String imageUrl : imageFiles) {
-                HouseImage image = HouseImage.builder()
-                        .imageUrl(imageUrl)
-                        .house(house)
-                        .build();
-                imageEntities.add(image);
+            for (MultipartFile file : imageFiles) {
+                try {
+                    String imageUrl = s3Uploader.upload(file, "houses"); // S3 업로드
+                    HouseImage img = HouseImage.builder()
+                            .imageUrl(imageUrl)
+                            .house(house)
+                            .build();
+                    imageEntities.add(img);
+                } catch (IOException e) {
+                    throw new RuntimeException("S3 업로드 실패: " + e.getMessage(), e);
+                }
             }
             house.setImages(imageEntities);
         }
