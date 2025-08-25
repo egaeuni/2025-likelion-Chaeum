@@ -47,7 +47,8 @@ public class SecurityConfig {
                 "http://localhost:5173",
                 "http://localhost:3000",
                 "http://localhost:8080",
-                "http://43.202.45.241:8080"
+                "http://43.202.45.241:8080",
+                "https://egaeuni.shop"
         ));
 
         // configuration.setAllowedOriginPatterns(List.of("*")); // 모든 도메인에서의 요청을 허용합니다.
