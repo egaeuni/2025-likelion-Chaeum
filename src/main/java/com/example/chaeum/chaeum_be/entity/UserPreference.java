@@ -18,20 +18,20 @@ public class UserPreference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Enumerated(EnumType.STRING)
     private PurposeType purpose;
 
-    @ElementCollection(targetClass = UsagePurposeType.class)
-    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
-            name = "user_usage_purpose",
+            name = "user_preference_usage",
             joinColumns = @JoinColumn(name = "user_preference_id")
     )
-    @Column(name = "usage_purpose")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "usage_purpose", nullable = false)
     private List<UsagePurposeType> usagePurpose;
 
     @Column(length = 500)
@@ -40,10 +40,8 @@ public class UserPreference {
     @Column(length = 500)
     private String usagePurposeEtcDetail;
 
-    @jakarta.validation.constraints.AssertTrue(
-            message = "저만의 희망사항이 있어요"
-    )
-    private boolean isEtcDetailValid() {
+    @jakarta.validation.constraints.AssertTrue(message = "기타(ETC) 선택 시 상세 내용을 입력해 주세요.")
+    public boolean isEtcDetailValid() {
         boolean hasEtc = usagePurpose != null && usagePurpose.contains(UsagePurposeType.ETC);
         return !hasEtc || (usagePurposeEtcDetail != null && !usagePurposeEtcDetail.isBlank());
     }

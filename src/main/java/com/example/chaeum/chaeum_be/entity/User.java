@@ -32,7 +32,7 @@ public class User {
     @Builder.Default
     private boolean isFirstLogin = true;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserPreference userPreference;
 
     public User(String email, String password) {

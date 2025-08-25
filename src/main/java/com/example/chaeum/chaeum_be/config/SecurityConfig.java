@@ -1,5 +1,8 @@
 package com.example.chaeum.chaeum_be.config;
 
+import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -69,15 +72,15 @@ public class SecurityConfig {
     }
 
     // SameSite=None을 위한 Tomcat 설정
-    //@Bean
-    //public ServletWebServerFactory servletContainer() {
-        //TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-        //tomcat.addContextCustomizers(context -> {
-            //Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
-            //cookieProcessor.setSameSiteCookies("None"); // SameSite=None
-            //context.setCookieProcessor(cookieProcessor);
-            //context.getServletContext().getSessionCookieConfig().setSecure(true);
-        //});
-        //return tomcat;
-    //}
+    @Bean
+    public ServletWebServerFactory servletContainer() {
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        tomcat.addContextCustomizers(context -> {
+            Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
+            cookieProcessor.setSameSiteCookies("None");
+            context.setCookieProcessor(cookieProcessor);
+            context.getServletContext().getSessionCookieConfig().setSecure(true);
+        });
+        return tomcat;
+    }
 }
