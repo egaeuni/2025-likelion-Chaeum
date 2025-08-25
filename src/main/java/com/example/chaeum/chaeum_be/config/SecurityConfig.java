@@ -33,7 +33,7 @@ public class SecurityConfig {
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         var cfg = new org.springframework.web.cors.CorsConfiguration();
         cfg.setAllowedOrigins(java.util.List.of(
-                "http://localhost:5173","http://localhost:3000",
+                "http://localhost:5173","http://localhost:3000", "https://chaeum-fe.vercel.app/",
                 "https://egaeuni.shop","https://www.egaeuni.shop","https://api.egaeuni.shop"
         ));
         cfg.setAllowedMethods(java.util.List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
