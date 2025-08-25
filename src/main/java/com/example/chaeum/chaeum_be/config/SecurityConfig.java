@@ -28,6 +28,7 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll() // 스웨거 UI 관련 경로에 대한 접근을 허용합니다.
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/**").permitAll() // "/api" 경로에 대한 접근을 허용합니다.
                         .anyRequest().permitAll() // 모든 다른 요청에 대한 접근을 허용합니다.
                 )
@@ -46,15 +47,16 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "http://localhost:3000",
-                "http://localhost:8080",
-                "http://43.202.45.241:8080",
-                "https://egaeuni.shop"
+                "https://egaeuni.shop",
+                "https://www.egaeuni.shop",
+                "https://api.egaeuni.shop"
         ));
 
         // configuration.setAllowedOriginPatterns(List.of("*")); // 모든 도메인에서의 요청을 허용합니다.
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드를 설정합니다.
         configuration.setAllowedHeaders(List.of("*")); // 모든 헤더를 허용합니다.
         configuration.setAllowCredentials(true); // 쿠키를 포함한 인증 정보 교환을 허용합니다.
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
