@@ -35,7 +35,7 @@ public class HouseController {
             description = "집을 등록할 수 있습니다."
     )
     @PostMapping(value = "/house/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> create(@RequestPart(value = "house", required = false) @Valid HouseCreateDTO dto,
+    public ResponseEntity<?> create(@RequestPart(value = "house") @Valid HouseCreateDTO dto,  // required=false 제거
                                     @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                     HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
@@ -43,6 +43,13 @@ public class HouseController {
             return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
                     .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
         }
+
+        // null 체크 추가
+        if(dto == null) {
+            return ResponseEntity.status(ErrorCode.INVALID_INPUT.getStatus().value())
+                    .body(new ErrorResponseDTO(ErrorCode.INVALID_INPUT, null));
+        }
+
         dto.setHouseImages(images);
         return houseService.createNewHouse(dto, loginUser);
     }
