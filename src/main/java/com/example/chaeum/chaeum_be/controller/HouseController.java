@@ -10,11 +10,13 @@ import com.example.chaeum.chaeum_be.service.HouseService;
 import com.example.chaeum.chaeum_be.service.S3Uploader;
 import com.example.chaeum.chaeum_be.service.ScrapService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +31,10 @@ public class HouseController {
     private final ScrapService scrapService;
     private final S3Uploader s3Uploader;
 
+    private User getLoggedInUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return (User) auth.getPrincipal();
+    }
 
     @Operation(
             summary = "집 등록",
@@ -37,19 +43,8 @@ public class HouseController {
     @PostMapping(value = "/house/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> create(@RequestPart(value = "house") @Valid HouseCreateDTO dto,  // required=false 제거
                                     @RequestPart(value = "images", required = false) List<MultipartFile> images,
-                                    HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
-        if(loginUser == null) {
-            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
-                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
-        }
-
-        // null 체크 추가
-        if(dto == null) {
-            return ResponseEntity.status(ErrorCode.INVALID_INPUT.getStatus().value())
-                    .body(new ErrorResponseDTO(ErrorCode.INVALID_INPUT, null));
-        }
-
+                                    @AuthenticationPrincipal User loginUser
+    ) {
         dto.setHouseImages(images);
         return houseService.createNewHouse(dto, loginUser);
     }
@@ -59,12 +54,7 @@ public class HouseController {
             description = "집의 상세 정보를 조회할 수 있습니다."
     )
     @GetMapping("house/{houseId}")
-    public ResponseEntity<?> detail(@PathVariable Long houseId, HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
-                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
-        }
+    public ResponseEntity<?> detail(@PathVariable Long houseId, @AuthenticationPrincipal User loginUser) {
         return houseService.detail(houseId, loginUser);
     }
 
@@ -73,12 +63,7 @@ public class HouseController {
             description = "집을 수정할 수 있습니다."
     )
     @PatchMapping("/house/update/{houseId}")
-    public ResponseEntity<?> updateHouse(@PathVariable Long houseId, @RequestBody @Valid HouseUpdateDTO dto, HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
-        if(loginUser == null) {
-            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
-                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
-        }
+    public ResponseEntity<?> updateHouse(@PathVariable Long houseId, @RequestBody @Valid HouseUpdateDTO dto, @AuthenticationPrincipal User loginUser) {
         return houseService.updateHouse(houseId, dto, loginUser);
     }
 
@@ -90,14 +75,8 @@ public class HouseController {
     public ResponseEntity<?> updateHouseImages(
             @PathVariable Long houseId,
             @RequestPart(value="images", required=false) List<MultipartFile> images,
-            HttpSession session
-    ) throws IOException{
-        User loginUser = (User) session.getAttribute("loginUser");
-        if(loginUser == null) {
-            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
-                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
-        }
-
+            @AuthenticationPrincipal User loginUser
+    ) throws IOException {
         List<String> urls = new ArrayList<>();
         if (images != null && !images.isEmpty()) {
             for (MultipartFile file : images) {
@@ -116,12 +95,7 @@ public class HouseController {
             description = "집을 스크랩할 수 있습니다."
     )
     @PostMapping("/house/scrap/{houseId}")
-    public ResponseEntity<?> addScrap(@PathVariable Long houseId, HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
-                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
-        }
+    public ResponseEntity<?> addScrap(@PathVariable Long houseId, @AuthenticationPrincipal User loginUser) {
         return scrapService.addScrap(loginUser, houseId);
     }
 
@@ -130,12 +104,7 @@ public class HouseController {
             description = "내가 한 스크랩을 취소할 수 있습니다."
     )
     @DeleteMapping("/house/scrap/{houseId}")
-    public ResponseEntity<?> removeScrap(@PathVariable Long houseId, HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
-        if (loginUser == null) {
-            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
-                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
-        }
+    public ResponseEntity<?> removeScrap(@PathVariable Long houseId, @AuthenticationPrincipal User loginUser) {
         return scrapService.removeScrap(loginUser, houseId);
     }
 }

@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDTO {
+    private String token;
     private Long id;
     private String name;
     private String email;

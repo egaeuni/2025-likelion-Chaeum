@@ -15,6 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/houses")
