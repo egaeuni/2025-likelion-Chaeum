@@ -56,17 +56,10 @@ public class SecurityConfig {
     }
 
     @Bean
-<<<<<<< Updated upstream
-    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
-        var cfg = new org.springframework.web.cors.CorsConfiguration();
-        cfg.setAllowedOrigins(java.util.List.of(
-                "http://localhost:5173","http://localhost:3000", "https://chaeum-fe.vercel.app/",
-=======
     public CorsConfigurationSource corsConfigurationSource() {
         var cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(List.of(
                 "http://localhost:5173","http://localhost:3000", "http://localhost:8080",
->>>>>>> Stashed changes
                 "https://egaeuni.shop","https://www.egaeuni.shop","https://api.egaeuni.shop"
         ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));

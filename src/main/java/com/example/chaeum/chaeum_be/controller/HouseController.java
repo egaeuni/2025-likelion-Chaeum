@@ -71,12 +71,17 @@ public class HouseController {
             summary = "집 사진 수정",
             description = "집 사진을 수정할 수 있습니다."
     )
-    @PatchMapping(value = "house/update/{houseId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/house/update/{houseId}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateHouseImages(
             @PathVariable Long houseId,
             @RequestPart(value="images", required=false) List<MultipartFile> images,
             @AuthenticationPrincipal User loginUser
     ) throws IOException {
+        System.out.println("메서드 진입 성공!");
+        if (loginUser == null) {
+            return ResponseEntity.status(ErrorCode.UNAUTHORIZED_UESR.getStatus().value())
+                    .body(new ErrorResponseDTO(ErrorCode.UNAUTHORIZED_UESR, null));
+        }
         List<String> urls = new ArrayList<>();
         if (images != null && !images.isEmpty()) {
             for (MultipartFile file : images) {
@@ -84,6 +89,7 @@ public class HouseController {
                 urls.add(url);
             }
         }
+
         HouseImageUpdateDTO dto = new HouseImageUpdateDTO();
         dto.setImageUrls(urls);
 
