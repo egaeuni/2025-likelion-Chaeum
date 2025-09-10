@@ -59,8 +59,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         var cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(List.of(
-                "http://localhost:5173","http://localhost:3000", "http://localhost:8080",
-                "https://egaeuni.shop","https://www.egaeuni.shop","https://api.egaeuni.shop"
+                "http://localhost:5173","http://localhost:3000", "http://localhost:8080"
         ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
