@@ -13,6 +13,9 @@ import com.example.chaeum.chaeum_be.enums.UsagePurposeType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
 import com.example.chaeum.chaeum_be.repository.UserRepository;
+import com.example.chaeum.chaeum_be.jwt.JWTUtil;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final HouseRepository houseRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JWTUtil jwtUtil;
 
     // 회원가입
     @Override
@@ -35,25 +39,28 @@ public class UserServiceImpl implements UserService{
         String password = dto.getPassword();
         String pattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{4,}$";
 
+        // 비밀번호 형식이 맞지 않을 경우
         if(!password.matches(pattern)) {
             return ResponseEntity
                     .status(ErrorCode.INVALID_PASSWORD_FORMAT.getStatus().value())
                     .body(new ErrorResponseDTO(ErrorCode.INVALID_PASSWORD_FORMAT, null));
-
         }
 
+        // 비밀번호 != 비밀번호 형식
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             return ResponseEntity
                     .status(ErrorCode.PASSWORD_MISMATCH.getStatus().value())
                     .body(new ErrorResponseDTO(ErrorCode.PASSWORD_MISMATCH, null));
         }
 
+        // 이미 존재하는 전화번호일 경우
         if (userRepository.existsByPhoneNum(dto.getPhoneNum())) {
             return ResponseEntity
                     .status(ErrorCode.DUPLICATE_PHONENUM.getStatus().value())
                     .body(new ErrorResponseDTO(ErrorCode.DUPLICATE_PHONENUM, null));
         }
 
+        // 이미 존재하는 이메일일 경우
         if (userRepository.existsByEmail(dto.getEmail())) {
             return ResponseEntity
                     .status(ErrorCode.DUPLICATE_EMAIL.getStatus().value())
@@ -90,14 +97,16 @@ public class UserServiceImpl implements UserService{
                     .body(new ErrorResponseDTO(ErrorCode.PASSWORD_NOT_CORRECT, null));
         }
 
+        String token = jwtUtil.createJWT(user.getEmail());
+
         UserResponseDTO resp = UserResponseDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
                 .isFirstLogin(user.isFirstLogin())
+                .token(token)
                 .build();
-
-
+        
         return ResponseEntity
                 .status(ResponseCode.SUCCESS_LOGIN.getStatus().value())
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_LOGIN, resp));
@@ -106,9 +115,9 @@ public class UserServiceImpl implements UserService{
     // 온보딩
     @Override
     public ResponseEntity<?> onboarding(OnboardingRequestDTO dto) {
-        User user = getLoggedInUser(dto);
+        User user = getLoggedInUser();
 
-        if(!user.isFirstLogin()) {
+        if (!user.isFirstLogin()) {
             return ResponseEntity
                     .status(ErrorCode.ALREADY_ONBOARDED.getStatus().value())
                     .body(new ErrorResponseDTO(ErrorCode.ALREADY_ONBOARDED, null));
@@ -122,7 +131,6 @@ public class UserServiceImpl implements UserService{
                 .usagePurposeEtcDetail(dto.getUsagePurposeEtcDetail())
                 .build();
 
-        // Purpose가 BUY 또는 BOTH인데 usagePurpose가 비어있는 경우
         if ((dto.getPurpose() == PurposeType.BUY || dto.getPurpose() == PurposeType.BOTH)
                 && (dto.getUsagePurpose() == null || dto.getUsagePurpose().isEmpty())) {
             return ResponseEntity
@@ -130,7 +138,6 @@ public class UserServiceImpl implements UserService{
                     .body(new ErrorResponseDTO(ErrorCode.USAGE_PURPOSE_REQUIRED_FOR_BUYERS, null));
         }
 
-        // ETC가 포함됐는데 usagePurposeEtcDetail이 비어있는 경우
         if (dto.getUsagePurpose() != null &&
                 dto.getUsagePurpose().contains(UsagePurposeType.ETC) &&
                 (dto.getUsagePurposeEtcDetail() == null || dto.getUsagePurposeEtcDetail().isBlank())) {
@@ -149,11 +156,17 @@ public class UserServiceImpl implements UserService{
                 .body(new ResponseDTO<>(ResponseCode.SUCCESS_ONBOARDING, dto));
     }
 
-    private User getLoggedInUser(OnboardingRequestDTO dto) {
-        String email = dto.getEmail();
-        return userRepository.findUserByEmail(email)
+    private User getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
+            throw new GlobalException(ErrorCode.UNAUTHORIZED_UESR);
+        }
+
+        User user = (User) authentication.getPrincipal();
+        return userRepository.findUserByEmail(user.getEmail())
                 .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
     }
+
 
     // mypage
     @Override

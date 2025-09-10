@@ -11,9 +11,12 @@ import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
 import com.example.chaeum.chaeum_be.repository.ScrapRepository;
+import com.example.chaeum.chaeum_be.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +26,24 @@ import java.util.List;
 public class ScrapServiceImpl implements ScrapService{
     private final ScrapRepository scrapRepository;
     private final HouseRepository houseRepository;
+    private final UserRepository userRepository;
 
+    private User getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
+            throw new GlobalException(ErrorCode.UNAUTHORIZED_UESR);
+        }
+
+        User user = (User) authentication.getPrincipal();
+        return userRepository.findUserByEmail(user.getEmail())
+                .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND));
+    }
+
+
+    // 스크랩 추가
     public ResponseEntity<?> addScrap(User user, Long houseId){
+        user = getLoggedInUser();
+
         House house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.HOUSE_NOT_FOUND));
 
@@ -56,6 +75,8 @@ public class ScrapServiceImpl implements ScrapService{
 
     @Transactional
     public ResponseEntity<?> removeScrap(User user, Long houseId) {
+        user = getLoggedInUser();
+
         House house = houseRepository.findById(houseId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.HOUSE_NOT_FOUND));
 
@@ -68,6 +89,8 @@ public class ScrapServiceImpl implements ScrapService{
 
     @Transactional
     public ResponseEntity<?> myscrap(User user) {
+        user = getLoggedInUser();
+
         List<Scrap> scraps = scrapRepository.findByUser(user);
 
         List<HouseListDTO> scrapList = scraps.stream()
