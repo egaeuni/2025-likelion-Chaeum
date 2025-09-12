@@ -42,11 +42,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(requireAuthUrls.toArray(new String[0])).permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/", "/login", "/register").permitAll()
-                        .requestMatchers(HttpMethod.POST).authenticated()
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST, "/register", "/login").permitAll() // POST 요청 중 "/register", "/login"은 허용
+                        .requestMatchers(HttpMethod.GET, "/").permitAll() // GET 요청 중 "/"는 허용
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 모두 허용
+                        .requestMatchers(requireAuthUrls.toArray(new String[0])).permitAll() // Swagger 관련 URL 허용
+                        .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(login -> login.disable())
