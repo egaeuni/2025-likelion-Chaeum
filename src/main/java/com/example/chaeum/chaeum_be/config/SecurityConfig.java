@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(requireAuthUrls.toArray(new String[0])).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/", "/login", "/register").permitAll()
                         .requestMatchers(HttpMethod.POST).authenticated()
                         .anyRequest().authenticated()
                 )
