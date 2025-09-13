@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/register", "/login").permitAll() // POST 요청 중 "/register", "/login"은 허용
-                        .requestMatchers(HttpMethod.GET, "/").permitAll() // GET 요청 중 "/"는 허용
+                        .requestMatchers(HttpMethod.GET, "/", "/health-check").permitAll() // GET 요청 중 "/"는 허용
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 모두 허용
                         .requestMatchers(requireAuthUrls.toArray(new String[0])).permitAll() // Swagger 관련 URL 허용
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
@@ -59,7 +59,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         var cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(List.of(
-                "http://localhost:5173","http://localhost:3000", "http://localhost:8080"
+                "http://localhost:5173","http://localhost:3000", "http://localhost:8080", "http://43.202.195.1", "https://chaeumm.com"
         ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
