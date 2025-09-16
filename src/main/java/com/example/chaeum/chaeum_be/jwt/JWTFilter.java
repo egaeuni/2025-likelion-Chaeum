@@ -27,8 +27,12 @@ public class JWTFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     private static final List<String> NO_AUTH_URLS = List.of(
-            "/", "/login", "/register",
-            "/v3/api-docs", "/swagger-ui", "/swagger-ui.html"
+            "/login",
+            "/register",
+            "/v3/api-docs",
+            "/swagger-ui",
+            "/swagger-resources",
+            "/webjars"
     );
 
     public JWTFilter(JWTUtil jwtUtil, UserRepository userRepository) {
