@@ -25,6 +25,8 @@ jobs:
           pkill -f chaeum-be-0.0.1-SNAPSHOT.jar || true
           git pull origin main
           ./gradlew build -x test --no-daemon
+          export CLOUD_AWS_S3_BUCKETNAME='chaeum-25'
+          echo 'export CLOUD_AWS_S3_BUCKETANAME=chaeum-25' >> ~/.bashrc
           cd build/libs/
           nohup java -jar chaeum-be-0.0.1-SNAPSHOT.jar --server.address=0.0.0.0 --cloud.aws.region.static=ap-northeast-2 > app.log 2>&1 &
         EOF
