@@ -59,11 +59,13 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         var cfg = new CorsConfiguration();
         cfg.setAllowedOrigins(List.of(
-                "http://localhost:5173","http://localhost:3000", "http://localhost:8080", "http://43.202.195.1", "https://chaeumm.com"
+                "http://localhost:5173","http://localhost:3000", "http://localhost:8080", "http://43.202.195.1", "https://chaeumm.com", "https://chaeum-fe.vercel.app"
         ));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
+        cfg.setExposedHeaders(List.of("Authorization", "Content-Type"));
         cfg.setAllowCredentials(true); // 쿠키 전송 허용(프론트는 credentials: 'include')
+        cfg.setMaxAge(3600L);
 
         var src = new UrlBasedCorsConfigurationSource();
         src.registerCorsConfiguration("/**", cfg);
