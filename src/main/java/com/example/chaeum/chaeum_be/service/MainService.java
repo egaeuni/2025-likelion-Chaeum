@@ -1,4 +1,3 @@
-// com/example/chaeum/chaeum_be/service/MainService.java
 package com.example.chaeum.chaeum_be.service;
 
 import com.example.chaeum.chaeum_be.dto.main.MainSectionResponseDTO;

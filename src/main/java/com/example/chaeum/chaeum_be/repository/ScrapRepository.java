@@ -13,5 +13,5 @@ public interface ScrapRepository extends JpaRepository <Scrap, Long> {
     boolean existsByUserAndHouse(User user, House house);
     List<Scrap> findByUser(User user);
     void deleteByUserAndHouse(User user, House house);
-
+    boolean existsByUserIdAndHouseId(Long userId, Long houseId);
 }
