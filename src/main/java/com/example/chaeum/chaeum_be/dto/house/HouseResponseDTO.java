@@ -42,4 +42,6 @@ public class HouseResponseDTO {
     private String phoneNum;
 
     private RegionType region;
+
+    private boolean scrapped;
 }

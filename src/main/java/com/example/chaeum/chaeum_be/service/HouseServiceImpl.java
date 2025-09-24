@@ -15,6 +15,7 @@ import com.example.chaeum.chaeum_be.entity.User;
 import com.example.chaeum.chaeum_be.enums.SourceType;
 import com.example.chaeum.chaeum_be.exception.GlobalException;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
+import com.example.chaeum.chaeum_be.repository.ScrapRepository;
 import com.example.chaeum.chaeum_be.repository.UserPreferenceRepository;
 import com.example.chaeum.chaeum_be.util.AddressRegionExtractor;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,8 @@ public class HouseServiceImpl implements HouseService {
     private final HouseRepository houseRepository;
     private final UserPreferenceRepository prefRepo;
     private final S3Uploader s3Uploader;
+
+    private final ScrapRepository scrapRepository;
 
     @Override
     public ResponseEntity<?> createNewHouse(HouseCreateDTO dto, User loginUser) {
@@ -135,6 +138,11 @@ public class HouseServiceImpl implements HouseService {
                 .map(HouseImage::getImageUrl)
                 .toList();
 
+        boolean scrapped = false;
+        if (loginUser != null) {
+            scrapped = scrapRepository.existsByUserIdAndHouseId(loginUser.getId(), houseId);
+        }
+
         HouseResponseDTO dto = HouseResponseDTO.builder()
                 .id(house.getId())
                 .source(house.getSource())
@@ -159,6 +167,7 @@ public class HouseServiceImpl implements HouseService {
                 .postedOn(house.getPostedOn())
                 .phoneNum(house.getOwner() != null ? house.getOwner().getPhoneNum(): null)
                 .region(house.getRegion())
+                .scrapped(scrapped)
                 .build();
 
         return ResponseEntity
