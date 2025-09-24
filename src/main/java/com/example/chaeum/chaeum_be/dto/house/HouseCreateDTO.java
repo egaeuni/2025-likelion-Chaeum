@@ -1,6 +1,7 @@
 package com.example.chaeum.chaeum_be.dto.house;
 
 import com.example.chaeum.chaeum_be.enums.DealType;
+import com.example.chaeum.chaeum_be.enums.PriceType;
 import com.example.chaeum.chaeum_be.enums.SaleType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +35,9 @@ public class HouseCreateDTO {
 
     @NotNull(message = "보증금/임대료 입력은 필수입니다.")
     private String depositRent;
+
+    @NotNull(message = "가격대 선택은 필수입니다.")
+    private PriceType priceType;
 
     @NotNull(message = "면적 입력은 필수입니다.")
     private String area;
