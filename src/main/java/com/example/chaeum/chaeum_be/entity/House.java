@@ -49,6 +49,7 @@ public class House {
     private String depositRent;
 
     // 가격 유형
+    @Enumerated(EnumType.STRING)
     private PriceType priceType;
 
     // 면적

@@ -6,15 +6,12 @@ import com.example.chaeum.chaeum_be.entity.House;
 import com.example.chaeum.chaeum_be.entity.HouseImage;
 import com.example.chaeum.chaeum_be.enums.SourceType;
 import com.example.chaeum.chaeum_be.repository.HouseRepository;
-import jakarta.persistence.criteria.Path;
-import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,24 +46,9 @@ public class HouseQueryServiceImpl implements HouseQueryService {
             spec = spec.and((root, q, cb) -> root.get("dealType").in(r.getDealTypes()));
         }
 
-        // 5) 가격(다중 구간 OR)
-        if (r.getPriceRanges() != null && !r.getPriceRanges().isEmpty()) {
-            spec = spec.and((root, q, cb) -> {
-                List<Predicate> orRanges = new ArrayList<>();
-                Path<Long> price = root.get("depositRent");
-
-                r.getPriceRanges().forEach(pr -> {
-                    List<Predicate> ands = new ArrayList<>();
-                    ands.add(cb.isNotNull(price));
-                    if (pr.getMin() != null) ands.add(cb.ge(price, pr.getMin()));
-                    if (pr.getMax() != null) ands.add(cb.le(price, pr.getMax()));
-                    if (!ands.isEmpty()) {
-                        orRanges.add(cb.and(ands.toArray(new Predicate[0])));
-                    }
-                });
-
-                return orRanges.isEmpty() ? cb.conjunction() : cb.or(orRanges.toArray(new Predicate[0]));
-            });
+        // 5) 가격 (PriceType 기반 - enum 매칭)
+        if (r.getPriceTypes() != null && !r.getPriceTypes().isEmpty()) {
+            spec = spec.and((root, q, cb) -> root.get("priceType").in(r.getPriceTypes()));
         }
 
         Page<House> page;
