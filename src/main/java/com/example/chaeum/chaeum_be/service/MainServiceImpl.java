@@ -123,8 +123,9 @@ public class MainServiceImpl implements MainService {
 
     private List<HouseCardDTO> latestUserHouses(int limit) {
         int size = Math.max(1, limit);
-        Specification<House> spec = (root, q, cb) -> cb.equal(root.get("source"), SourceType.USER);
-        Pageable top = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "postedOn"));
+        Specification<House> spec = (root, q, cb) ->
+                cb.equal(root.get("source"), SourceType.USER);
+        Pageable top = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "id"));
         return toCardDtos(houseRepo.findAll(spec, top).getContent());
     }
 
