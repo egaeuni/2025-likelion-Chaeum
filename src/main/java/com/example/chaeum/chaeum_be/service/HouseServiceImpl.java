@@ -54,6 +54,7 @@ public class HouseServiceImpl implements HouseService {
                 .saleType(dto.getSaleType())
                 .title(dto.getTitle())
                 .depositRent(dto.getDepositRent())
+                .priceType(dto.getPriceType())
                 .area(dto.getArea())
                 .moveInAvailableDate(dto.getMoveInAvailableDate())
                 .currentJeonse(dto.getCurrentJeonse())
@@ -104,6 +105,7 @@ public class HouseServiceImpl implements HouseService {
                 .saleType(savedHouse.getSaleType())
                 .title(savedHouse.getTitle())
                 .depositRent(savedHouse.getDepositRent())
+                .priceType(savedHouse.getPriceType())
                 .area(savedHouse.getArea())
                 .moveInAvailableDate(savedHouse.getMoveInAvailableDate())
                 .currentJeonse(savedHouse.getCurrentJeonse())
@@ -151,6 +153,7 @@ public class HouseServiceImpl implements HouseService {
                 .saleType(house.getSaleType())
                 .title(house.getTitle())
                 .depositRent(house.getDepositRent())
+                .priceType(house.getPriceType())
                 .area(house.getArea())
                 .moveInAvailableDate(house.getMoveInAvailableDate())
                 .currentJeonse(house.getCurrentJeonse())
@@ -200,6 +203,7 @@ public class HouseServiceImpl implements HouseService {
             house.setAddress(dto.getAddress());
             house.setRegion(AddressRegionExtractor.extract(dto.getAddress()));
         }
+        if (dto.getPriceType() != null) house.setPriceType(dto.getPriceType());
         if (dto.getDealType() != null) house.setDealType(dto.getDealType());
         if (dto.getSaleType() != null) house.setSaleType(dto.getSaleType());
         if (dto.getDepositRent() != null) house.setDepositRent(dto.getDepositRent());
@@ -232,6 +236,7 @@ public class HouseServiceImpl implements HouseService {
                 .saleType(house.getSaleType())
                 .title(house.getTitle())
                 .depositRent(house.getDepositRent())
+                .priceType(house.getPriceType())
                 .area(house.getArea())
                 .moveInAvailableDate(house.getMoveInAvailableDate())
                 .currentJeonse(house.getCurrentJeonse())

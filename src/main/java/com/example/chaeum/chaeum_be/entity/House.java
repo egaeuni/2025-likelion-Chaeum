@@ -48,6 +48,10 @@ public class House {
     // 보증금 / 매매가
     private String depositRent;
 
+    // 가격 유형
+    @Enumerated(EnumType.STRING)
+    private PriceType priceType;
+
     // 면적
     private String area;
 

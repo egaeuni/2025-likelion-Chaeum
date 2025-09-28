@@ -1,10 +1,7 @@
 package com.example.chaeum.chaeum_be.dto.house;
 
 import com.example.chaeum.chaeum_be.entity.User;
-import com.example.chaeum.chaeum_be.enums.DealType;
-import com.example.chaeum.chaeum_be.enums.RegionType;
-import com.example.chaeum.chaeum_be.enums.SaleType;
-import com.example.chaeum.chaeum_be.enums.SourceType;
+import com.example.chaeum.chaeum_be.enums.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.cglib.core.Local;
@@ -24,6 +21,7 @@ public class HouseResponseDTO {
 
     private String title;
     private String depositRent;
+    private PriceType priceType;
     private String area;
 
     private String currentJeonse;

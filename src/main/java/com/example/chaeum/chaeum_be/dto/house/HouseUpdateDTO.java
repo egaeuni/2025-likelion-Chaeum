@@ -1,6 +1,7 @@
 package com.example.chaeum.chaeum_be.dto.house;
 
 import com.example.chaeum.chaeum_be.enums.DealType;
+import com.example.chaeum.chaeum_be.enums.PriceType;
 import com.example.chaeum.chaeum_be.enums.SaleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ public class HouseUpdateDTO {
     private SaleType saleType;
     private String title;
     private String depositRent;
+    private PriceType priceType;
     private String area;
     private String moveInAvailableDate;
     private String currentJeonse;
